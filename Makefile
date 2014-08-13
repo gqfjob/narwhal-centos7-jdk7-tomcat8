@@ -1,6 +1,6 @@
 NAME = toprightgroup/narwhal-centos7-jdk7-tomcat8
 
-.PHONY: all build run debug bash pull release
+.PHONY: all build run debug bash pull pushmaster release
 
 all: build
 
@@ -19,6 +19,12 @@ bash:
 
 pull:
 	docker pull ${NAME}
+
+pushmaster:
+	@echo $(NAME):master >docker/buildname
+	git commit -a
+	git push
+	@echo $(NAME):local >docker/buildname
 
 release: 
 	git pull

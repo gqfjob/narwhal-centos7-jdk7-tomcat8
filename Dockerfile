@@ -4,7 +4,11 @@ MAINTAINER TRG DevOps
 
 ADD docker /docker
 
+ADD ansible /ansible
+
 RUN /docker/build
+
+RUN /usr/bin/ansible-playbook -c local /ansible/site.yml
 
 CMD ["/docker/monit"]
 
