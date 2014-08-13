@@ -1,0 +1,5 @@
+---
+
+- name: create setenv.sh
+  template: src=setenv.sh.j2 dest=/opt/tomcat/bin/setenv.sh
+
