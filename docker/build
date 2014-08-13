@@ -1,0 +1,56 @@
+#!/bin/bash
+
+# Abort on errors
+set -e
+set -o errexit
+
+# Deal with proxies
+. /docker/proxy
+
+# Install Oracle JDK
+JDK_BUILD=01
+JDK_VERSION=7u67
+
+# Try our local copy, or fetch from Oracle if that fails
+if ! curl -L -O http://bkln1pbld01.emap-intl.net/files/jdk-${JDK_VERSION}-linux-x64.rpm ; then
+	curl -L -O -b "oraclelicense=a" http://download.oracle.com/otn-pub/java/jdk/${JDK_VERSION}-b${JDK_BUILD}/jdk-${JDK_VERSION}-linux-x64.rpm
+fi
+
+rpm -i jdk-${JDK_VERSION}-linux-x64.rpm
+rm -f jdk-${JDK_VERSION}-linux-x64.rpm
+java -version
+
+# Install Tomcat
+TOMCAT_VERSION=8.0.9
+curl -L "http://archive.apache.org/dist/tomcat/tomcat-8/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz" -o /tmp/catalina.tar.gz
+
+# Unpack
+tar xzf /tmp/catalina.tar.gz -C /opt
+mv /opt/apache-tomcat-${TOMCAT_VERSION} /opt/tomcat
+rm /tmp/catalina.tar.gz
+
+# Install APR and build Tomcat libs
+yum --disableplugin=fastestmirror -y install apr apr-devel openssl-devel gcc make
+cd /opt/tomcat/bin/
+tar xf tomcat-native.tar.gz
+cd tomcat-native-*-src/jni/native
+./configure --with-apr=/usr/bin/apr-1-config --with-java-home=/usr/java/default && make && make install
+cd /opt/tomcat/bin/
+rm -rf tomcat-native*
+yum -y remove apr-devel openssl-devel gcc make
+
+# Remove unneeded apps
+rm -rf /opt/tomcat/webapps/*
+rm -rf /opt/tomcat/temp
+rm -rf /opt/tomcat/logs
+
+# Move catalina config
+mv /docker/files/setenv.sh /opt/tomcat/bin
+
+# Add tomcat to monit
+mv /docker/files/monit.tomcat.conf /etc/monit.d/
+
+# Cleanup
+yum clean packages
+rm -rf /var/cache/*
+rm -rf /var/log/*
