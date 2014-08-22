@@ -1,0 +1,6 @@
+/opt/tomcat/logs/*.log /opt/tomcat/logs/catalina.out {
+copytruncate
+daliy
+rotate 0
+missingok
+}

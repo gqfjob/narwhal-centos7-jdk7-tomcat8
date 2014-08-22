@@ -25,12 +25,12 @@ TOMCAT_VERSION=8.0.9
 curl -L "http://archive.apache.org/dist/tomcat/tomcat-8/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz" -o /tmp/catalina.tar.gz
 
 # Unpack
-tar xzf /tmp/catalina.tar.gz -C /opt
-mv /opt/apache-tomcat-${TOMCAT_VERSION} /opt/tomcat
+tar xf /tmp/catalina.tar.gz -C /opt
+ln -s /opt/apache-tomcat-${TOMCAT_VERSION} /opt/tomcat
 rm /tmp/catalina.tar.gz
 
-# Install APR and build Tomcat libs
-yum --disableplugin=fastestmirror -y install apr apr-devel openssl-devel gcc make
+# Install required packages and build Tomcat APR libs
+yum --disableplugin=fastestmirror -y install apr apr-devel openssl-devel gcc make cronie
 cd /opt/tomcat/bin/
 tar xf tomcat-native.tar.gz
 cd tomcat-native-*-src/jni/native
@@ -44,11 +44,15 @@ rm -rf /opt/tomcat/webapps/*
 rm -rf /opt/tomcat/temp
 rm -rf /opt/tomcat/logs
 
-# Move catalina config
-mv /docker/files/setenv.sh /opt/tomcat/bin
+# Configure logging
+mv /docker/files/logrotate.d.tomcat /etc/logrotate.d/tomcat
+mv /docker/files/rsyslog.d.tomcat.conf /etc/rsyslog.d/tomcat.conf
+mv /docker/files/tomcat.logging.properties /opt/tomcat/conf/logging.properties
+mv /docker/files/tomcat.server.xml /opt/tomcat/conf/server.xml
 
-# Add tomcat to monit
+# Add monit conf
 mv /docker/files/monit.tomcat.conf /etc/monit.d/
+mv /docker/files/monit.cron.conf /etc/monit.d/
 
 # Cleanup
 yum clean packages

@@ -1,4 +1,4 @@
-FROM toprightgroup/narwhal-centos7:b1
+FROM toprightgroup/narwhal-centos7:b4
 
 MAINTAINER TRG DevOps
 
