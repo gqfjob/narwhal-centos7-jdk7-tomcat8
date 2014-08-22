@@ -1,4 +1,17 @@
 ---
 
-java_opts: $JAVA_OPTS -Djava.library.path=/usr/local/apr/lib
+# setenv.sh
+java_opts: $JAVA_OPTS -Djava.library.path=/usr/local/apr/lib -server -Xmx1024m -Xms128m -XX:MaxPermSize=256m -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false  -Dnewrelic.environment=production -Dspring.profiles.active=production -Duser.timezone=UTC
+#java_opts: -javaagent:/opt/app/newrelic-agent/newrelic.jar
+server_env: production
+catalina_opts: -agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n
+
+# anorak.properties
+elasticsearch.host: production-search-lb.anorak.lin.web.trgfrnt.com
+hibernate.connection.username: anorak_admin_prd
+hibernate.connection.password: kd45GDH7hnJ1AgdfQ
+hibernate.connection.url: jdbc:mysql://frln1pakq01.trgfrnt.com/anorak_admin_production
+security.hibernate.connection.username: ${hibernate.connection.username}
+security.hibernate.connection.password: ${hibernate.connection.password}
+security.hibernate.connection.url: ${hibernate.connection.url}
 
