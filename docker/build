@@ -58,3 +58,6 @@ mv /docker/files/monit.cron.conf /etc/monit.d/
 yum clean packages
 rm -rf /var/cache/*
 rm -rf /var/log/*
+
+#mv /docker/files/ROOT.war /opt/tomcat/webapps
+

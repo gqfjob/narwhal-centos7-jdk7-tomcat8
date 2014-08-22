@@ -7,11 +7,11 @@ server_env: production
 catalina_opts: -agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n
 
 # anorak.properties
-elasticsearch.host: production-search-lb.anorak.lin.web.trgfrnt.com
-hibernate.connection.username: anorak_admin_prd
-hibernate.connection.password: kd45GDH7hnJ1AgdfQ
-hibernate.connection.url: jdbc:mysql://frln1pakq01.trgfrnt.com/anorak_admin_production
-security.hibernate.connection.username: ${hibernate.connection.username}
-security.hibernate.connection.password: ${hibernate.connection.password}
-security.hibernate.connection.url: ${hibernate.connection.url}
+elasticsearch_host: production-search-lb.anorak.lin.web.trgfrnt.com
+hibernate_connection_username: anorak_admin_prd
+hibernate_connection_password: kd45GDH7hnJ1AgdfQ
+hibernate_connection_url: jdbc:mysql://frln1pakq01.trgfrnt.com/anorak_admin_production
+security_hibernate_connection_username: ${hibernate.connection.username}
+security_hibernate_connection_password: ${hibernate.connection.password}
+security_hibernate_connection_url: ${hibernate.connection.url}
 
