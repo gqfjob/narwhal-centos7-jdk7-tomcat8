@@ -6,8 +6,13 @@ ADD docker /docker
 
 ADD ansible /ansible
 
+# Build require software
 RUN /docker/build
 
+# Add TRG webapps
+ADD webapps /opt/tomcat/webapps
+
+# Configure exposed variables
 RUN /usr/bin/ansible-playbook -c local /ansible/site.yml
 
 CMD ["/docker/monit"]
