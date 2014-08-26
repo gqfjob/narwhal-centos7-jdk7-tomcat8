@@ -14,4 +14,3 @@ CMD ["/docker/monit"]
 
 EXPOSE 8080
 
-ADD webapp /opt/tomcat/webapps
